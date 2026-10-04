@@ -81,7 +81,7 @@ def home():
         recommended=recommended_activities
     )
 
-@app.get("/intro")
+@app.get("/")
 def intro():
     return render_template("intro.html")
 
