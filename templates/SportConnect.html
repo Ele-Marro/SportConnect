@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>SportConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='CssDesign.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='button-36.css') }}">
+
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='bg.jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="header-content">
+
+            <img src="{{ url_for('static', filename='logo.png') }}"
+                 alt="SportConnect logo"
+                 class="logo">
+
+            <div>
+                <h1>Welcome to SportConnect</h1>
+                <p>Connect with other sports enthusiasts!</p>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- SIDE NAVIGATION -->
+
+    <aside>
+
+        <p class="Menu">Menu</p>
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('messages') }}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('createactivity') }}">
+            Create Activity
+        </a>
+
+        <a href="void(0)">
+            Discover
+        </a>
+
+        <a href="{{ url_for('settings') }}">
+            Settings
+        </a>
+
+        <a href="javascript:void(0)">
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main>
+
+        <h2 class="search-activities-header">
+            Search Activities
+        </h2>
+
+        <!-- SEARCH BAR -->
+
+        <form id="form" class="search-activities-form">
+
+            <input
+                type="search"
+                id="query"
+                placeholder="Search for activities..."
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+
+        <!-- RECOMMENDED ACTIVITIES -->
+
+        <h2 class="section-heading">
+            Recommended Activities
+        </h2>
+
+        <div class="activity-grid">
+
+            {% for activity in recommended %}
+
+                <div class="activity-card">
+
+                    <div class="activity-title">
+                        {{ activity.sport }}
+                    </div>
+
+                    <p>{{ activity.date }}</p>
+
+                    <p>{{ activity.time }}</p>
+
+                    <p>
+                        {{ activity.joined }}/{{ activity.max_players }} Joined
+                    </p>
+
+                    <form
+                        class="join-form"
+                        action="{{ url_for('join_activity', activity_id=activity.id) }}"
+                        method="POST"
+                    >
+
+                        {% if activity.has_joined %}
+
+                            <button
+                                type="submit"
+                                class="join-button joined-button"
+                                disabled
+                            >
+                                Joined
+                            </button>
+
+                        {% elif activity.joined >= activity.max_players %}
+
+                            <button
+                                type="submit"
+                                class="join-button full-button"
+                                disabled
+                            >
+                                Full
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                type="submit"
+                                class="join-button"
+                            >
+                                Join
+                            </button>
+
+                        {% endif %}
+
+                    </form>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- UPCOMING ACTIVITIES -->
+
+        <h2 class="section-heading">
+            Your Upcoming Activities
+        </h2>
+
+        <div class="activity-grid">
+
+            {% for activity in activities %}
+
+                <div class="activity-card">
+
+                    <div class="activity-title">
+                        {{ activity.sport }}
+                    </div>
+
+                    <p>{{ activity.name }}</p>
+
+                    <p>
+                        {{ activity.date }} {{ activity.time }}
+                    </p>
+
+                    <p>{{ activity.location }}</p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+</body>
+</html>

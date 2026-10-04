@@ -1,0 +1,94 @@
+/* FreeFrontend - CSS Button Generator · "CUSTOM" · rev 0039 */
+.btn {
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+  --btn-bg: #ed8200;
+  --btn-fg: #181713;
+  --btn-focus: #181713;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  --btn-icon-size: 1em;
+  padding: 13px 30px;
+  vertical-align: middle;
+  touch-action: manipulation;
+  user-select: none;
+  border: 0;
+  border-radius: 12px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.00em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.3, 1), background-color 0.18s cubic-bezier(0.2, 0.7, 0.3, 1), color 0.18s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.btn > .btn__icon,
+.btn > svg,
+.btn > img {
+  display: block;
+  flex: 0 0 auto;
+  width: var(--btn-icon-size, 1em);
+  height: var(--btn-icon-size, 1em);
+  margin: 0;
+}
+.btn > img {
+  object-fit: contain;
+}
+.btn:hover {
+  background-color: var(--btn-fg);
+  color: var(--btn-bg);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--btn-focus);
+  outline-offset: 3px;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.btn:disabled:hover,
+.btn:disabled:active {
+  transform: none;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn:hover,
+  .btn:active {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+@media (forced-colors: active) {
+  .btn {
+    border: 1px solid ButtonBorder;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: none;
+  }
+  .btn:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+  }
+  .btn:disabled {
+    color: GrayText;
+    border-color: GrayText;
+  }
+  .btn > .btn__icon,
+  .btn > svg,
+  .btn > img {
+    color: currentColor;
+  }
+}

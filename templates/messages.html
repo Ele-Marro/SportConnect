@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Messages - SportConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='CssDesign.css') }}">
+</head>
+
+<body>
+
+      <style>
+  body {
+    background-image: url('{{ url_for("static", filename="bg.jpg") }}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+</style>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div>
+            <h1 style="font-size: 30px;">
+                Welcome to SportConnect
+            </h1>
+
+            <p align="center">
+                Connect with other sports enthusiasts!
+            </p>
+        </div>
+    </header>
+
+
+    <!-- SIDE NAVIGATION -->
+    <aside>
+
+        <p align="center" class="Menu">
+            Menu
+        </p>
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('messages') }}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('createactivity') }}">
+            Create Activity
+        </a>
+
+        <a href="javascript:void(0)">
+            Discover
+        </a>
+
+        <a href="{{ url_for('settings') }}">
+            Settings
+        </a>
+
+        <a href="javascript:void(0)">
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <h2>Messages</h2>
+
+
+        <!-- MESSAGE CONTAINER -->
+        <div class="message-container">
+
+
+            <!-- CONTACTS -->
+            <div class="contacts">
+
+                <!-- CONTACT SEARCH -->
+                <div class="contacts-header">
+
+                    <input
+                        type="text"
+                        placeholder="Search contacts"
+                        id="contact-search"
+                    >
+
+                </div>
+
+
+                <!-- PERSON 1 -->
+                <div class="contact active" data-person="Person 1">
+
+                    <div class="profile-picture">
+
+                        <img
+                            src="{{ url_for('static', filename='profile.png') }}"
+                            alt="Profile Picture"
+                        >
+
+                    </div>
+
+                    <div class="contact-info">
+
+                        <strong>
+                            Person 1
+                        </strong>
+
+                        <span>
+                            Hi, how are you?
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PERSON 2 -->
+                <div class="contact" data-person="Person 2">
+
+                    <div class="profile-picture">
+
+                        <img
+                            src="{{ url_for('static', filename='profile.png') }}"
+                            alt="Profile Picture"
+                        >
+
+                    </div>
+
+                    <div class="contact-info">
+
+                        <strong>
+                            Person 2
+                        </strong>
+
+                        <span>
+                            Are you coming to the game?
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PERSON 3 -->
+                <div class="contact" data-person="Person 3">
+
+                    <div class="profile-picture">
+
+                        <img
+                            src="{{ url_for('static', filename='profile.png') }}"
+                            alt="Profile Picture"
+                        >
+
+                    </div>
+
+                    <div class="contact-info">
+
+                        <strong>
+                            Person 3
+                        </strong>
+
+                        <span>
+                            What time is the match?
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHAT PANEL -->
+            <div class="chat-panel">
+
+
+                <!-- CHAT HEADER -->
+                <div class="chat-header">
+
+                    <div class="profile-picture">
+
+                        <img
+                            src="{{ url_for('static', filename='profile.png') }}"
+                            alt="Profile Picture"
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <strong id="chat-person">
+                            Person 1
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGES -->
+                <div class="chat-messages">
+
+                    {% for message in messages %}
+
+                        <div class="message {{ message.type }}">
+                            {{ message.text }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- MESSAGE INPUT -->
+                <form class="message-form" method="POST">
+
+                    <input
+                        type="text"
+                        name="message"
+                        id="message-input"
+                        placeholder="Type a message..."
+                        autocomplete="off"
+                        required
+                    >
+
+                    <button type="submit">
+                        Send
+                    </button>
+
+                </form>
+
+
+            </div>
+
+        </div>
+    </main>
+
+</body>
+
+</html>

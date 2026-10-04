@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet"
+          href="{{ url_for('static', filename='CssDesign.css') }}">
+
+        <link rel="stylesheet"
+          href="{{ url_for('static', filename='button-36.css') }}">
+
+        <title>SportConnect - Settings</title>
+    </head>
+    <body>
+        <header class="header">
+            <div class="header-content">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="SportConnect logo" class="logo">
+                <div>
+                    <h1>SportConnect Settings</h1>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Settings content goes here -->
+                 <aside>
+
+        <p class="Menu">Menu</p>
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('messages') }}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('createactivity') }}">
+            Create Activity
+        </a>
+
+        <a href="void(0)">
+            Discover
+        </a>
+
+        <a href="{{ url_for('settings') }}">
+            Settings
+        </a>
+
+        <a href="javascript:void(0)">
+            Logout
+        </a>
+
+    </aside>
+        </main>
+    </body>
+</html>

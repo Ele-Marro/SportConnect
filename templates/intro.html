@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='CssDesign.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='button.css') }}">
+        <header class= "header">
+            <div>
+        <h1 style="font-size: 30px;">
+            Welcome to SportConnect
+        </h1>
+
+        <p align="center">
+            Connect with other sports enthusiasts!
+        </p>
+            </div>
+        </header>
+        </head>
+        <body>
+
+    <div class="video-container">
+
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="{{ url_for('static', filename='vid.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="intro-content">
+
+            <h1>Welcome to SportConnect</h1>
+
+            <p>Connect with other sports enthusiasts!</p>
+
+
+<div class="intro-buttons">
+
+    <a href="{{ url_for('login') }}" class="btn btn--plus">
+        Login
+        <svg class="btn__icon"
+             xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24"
+             width="1em"
+             height="1em"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true"
+             focusable="false">
+            <path d="M5 12h14"/>
+            <path d="M12 5v14"/>
+        </svg>
+    </a>
+
+    <a href="{{ url_for('createaccount') }}" class="btn btn--plus">
+        Create Account
+        <svg class="btn__icon"
+             xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24"
+             width="1em"
+             height="1em"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true"
+             focusable="false">
+            <path d="M5 12h14"/>
+            <path d="M12 5v14"/>
+        </svg>
+    </a>
+
+</div>
+
+    </div>
+
+</body>
+</html>
