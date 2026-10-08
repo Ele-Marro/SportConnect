@@ -3,6 +3,15 @@ from flask import Flask, render_template, request, redirect, url_for  # type: ig
 # Initializes the app
 app = Flask(__name__)
 
+        )
+    """)
+
+    connection.commit()
+    print("Database initialized successfully.")
+    connection.close()
+
+
+#self is the particular object that is being created from the class, and it allows you to access the attributes and methods of that object. In this case, self._messages is an attribute of the InMemoryMessageStore class that stores the messages in memory for the duration of the app's runtime.
 #stores messages in memory for the duration of the app's runtime
 class InMemoryMessageStore():
     def __init__(self):
@@ -75,6 +84,13 @@ recommended_activities = [
 # HOME PAGE
 @app.get("/home")
 def home():
+    cursor.execute("""
+        SELECT id, creator_id, sport, activity_name, date, time, location, participants, description
+        """)
+
+    activities = cursor.fetchall()
+    connection.close()
+    
     return render_template(
         "SportConnect.html",
         activities=activity_store.get_activities(),
@@ -88,6 +104,15 @@ def intro():
 
 @app.get("/login")
 def login():
+
+        if user and check_password_hash(user[2], password):
+            session["user_id"] = user[0]    #this is 0 based indexing:
+                                            #[0] is the first item (user's id)
+            return redirect(url_for("home"))#how it works is that it takes the first value in the result
+
+        return "Invalid email or password"
+    
+
     return render_template("login.html")
 
 
@@ -102,6 +127,13 @@ def createaccount():
 
         print(username)
         print(email)
+        cursor.execute("""
+            INSERT INTO users (username, email, password_hash)
+            VALUES (?, ?, ?)
+        """, (username, email, password_hash))
+
+        connection.commit()
+        cursor.execute("SELECT * FROM users")
 
         return redirect(url_for("home"))
 
@@ -111,6 +143,15 @@ def createaccount():
 @app.get("/settings")
 def settings():
     return render_template("settings.html")
+
+
+def logout():
+    session.pop("user_id", None)
+    return redirect(url_for("intro"))
+
+@app.get("/discover")
+def discover():
+    return render_template("discover.html")
 
 
 @app.route("/messages", methods=["GET", "POST"])
@@ -134,13 +175,9 @@ def messages():
 def createactivity():
 
     if request.method == "POST":
+            
+            print("FORM DATA:", request.form)
 
-        activity = {
-            "sport": request.form.get("sport"),
-            "name": request.form.get("name"),
-            "date": request.form.get("date"),
-            "time": request.form.get("time"),
-            "location": request.form.get("location"),
             "participants": request.form.get("participants"),
             "description": request.form.get("description")
         }
@@ -148,6 +185,15 @@ def createactivity():
         activity_store.add_activity(activity)
 
         return redirect(url_for("home"))
+                    """, (creator_id, sport, activity_name, date, time, location, participants, description))
+
+            connection.commit()
+
+            cursor.execute("SELECT * FROM activity")
+            print("ACTIVITIES IN DATABASE:", cursor.fetchall())
+            connection.close()
+
+            return redirect(url_for("home"))
 
     return render_template("createactivity.html")
 
@@ -171,4 +217,5 @@ def join_activity(activity_id):
 
 # START FLASK
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True)

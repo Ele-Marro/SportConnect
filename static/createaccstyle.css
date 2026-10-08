@@ -14,52 +14,49 @@ body {
 }
 
 
-/* Main login card */
+/* Main card */
 
 .main {
     width: 400px;
-    height: 500px;
+    height: 450px;
 
     background: white;
 
     border-radius: 20px;
 
     box-shadow: 5px 20px 50px #dc7c15;
-}
-
-
-/* Login section */
-
-.login {
-    width: 100%;
-    height: 40%;
 
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: center;
 }
 
 
-/* Login form */
+/* Form area */
 
-.login form {
+.form-container {
     width: 100%;
-    display: block;
 }
 
 
-/* Login heading */
+/* Heading */
 
-.login label {
-    display: flex;
-    justify-content: center;
+h1 {
+    text-align: center;
 
     color: #ff8912;
 
     font-size: 32px;
     font-weight: bold;
 
-    margin: 0 0 40px;
+    margin: 0 0 35px;
+}
+
+
+/* Form */
+
+form {
+    width: 100%;
 }
 
 
@@ -73,7 +70,7 @@ body {
 
     box-sizing: border-box;
 
-    margin: 15px auto;
+    margin: 0 auto 15px;
 
     padding: 0 15px;
 
@@ -95,7 +92,7 @@ body {
 }
 
 
-/* Login button */
+/* Button */
 
 .main button {
     display: block;

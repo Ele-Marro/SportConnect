@@ -42,7 +42,7 @@
             Create Activity
         </a>
 
-        <a href="javascript:void(0)">
+        <a href="{{ url_for('intro') }}">
             Discover
         </a>
 
@@ -50,7 +50,7 @@
             Settings
         </a>
 
-        <a href="javascript:void(0)">
+        <a href="{{ url_for('logout')}}">
             Logout
         </a>
 
@@ -79,11 +79,11 @@
 
     <!-- ACTIVITY NAME -->
     <div class="form-field">
-        <label for="activity-name">Activity Name</label>
+        <label for="activity_name">Activity Name</label>
 
         <input
             type="text"
-            id="activity-name"
+            id="activity_name"
             name="activity_name"
             placeholder="e.g. Casual Basketball Match"
         >

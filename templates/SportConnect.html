@@ -30,10 +30,6 @@
 
         <div class="header-content">
 
-            <img src="{{ url_for('static', filename='logo.png') }}"
-                 alt="SportConnect logo"
-                 class="logo">
-
             <div>
                 <h1>Welcome to SportConnect</h1>
                 <p>Connect with other sports enthusiasts!</p>
@@ -62,7 +58,7 @@
             Create Activity
         </a>
 
-        <a href="void(0)">
+        <a href="{{ url_for('discover') }}">
             Discover
         </a>
 
@@ -70,7 +66,7 @@
             Settings
         </a>
 
-        <a href="javascript:void(0)">
+        <a href="{{ url_for('logout') }}">
             Logout
         </a>
 
@@ -185,16 +181,18 @@
                 <div class="activity-card">
 
                     <div class="activity-title">
-                        {{ activity.sport }}
+                        {{ activity["sport"] }}
                     </div>
 
-                    <p>{{ activity.name }}</p>
+                    <p>{{ activity["activity_name"] }}</p>
 
-                    <p>
-                        {{ activity.date }} {{ activity.time }}
-                    </p>
+                    <p> {{ activity["date"] }} {{ activity["time"] }}</p>
 
-                    <p>{{ activity.location }}</p>
+                    <p>{{ activity["location"] }}</p>
+
+                    <p>maximum participants: {{ activity["participants"] }}</p>
+
+                    <p>{{ activity["description"] }}</p>
 
                 </div>
 

@@ -1,8 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Technical Workshop</title>
+<head>
+    <title>Technical Workshop</title>
 </head>
+<body>
+    <div class="container">
+        <div id="E" class="text">E</div>
+        <div id="L" class="text">L</div>
+        <div id="E" class="text">E</div>
+        <div id="O" class="text">O</div>
+        <div id="N" class="text">N</div>
+        <div id="O" class="text">O</div>
+        <div id="R" class="text">R</div>
+        <div id="A" class="text">A</div>
+        <div id="M" class="text">M</div>
+    </div>
+</body>
+</html>
+<style>
+    .container { display: grid; grid-template-columns: repeat(3, 200px); grid-template-rows: repeat(3, 200px); gap: 10px;}
+    
+    .text {
+        width: 200px; height: 200px; padding: 5px; display: flex; align-items: center; justify-content: center; font-size: 300px;
+    }
+
+    #E {
+        background-color: #FF0000;}
+    #L {
+        background-color: #FF7F00;}
+    #O {
+        background-color: #FFFF00;}
+    #N {
+        background-color: #00FF00;}
+    #A {
+        background-color: #00FFFF;}
+    #R {
+        background-color: #0000FF;
+        font-size: 300px; font-weight: bold; color: #FFFFFF; text-align: center; line-height: 200px;
+    }
+    #M {
+        background-color: #8B00FF;
+         font-size: 300px; font-weight: bold; color: #FFFFFF; text-align: center; line-height: 150px;
+        }
+
+
+</style>
 <body>
 </body>
 </html>
