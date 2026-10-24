@@ -11,7 +11,9 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='button-36.css') }}">
 
+
     <style>
+
         body {
             background-image: url("{{ url_for('static', filename='bg.jpg') }}");
             background-size: cover;
@@ -27,11 +29,15 @@
 
     <!-- HEADER -->
     <header class="header">
+        
+        <img style="width: 100px; height:100px;" src="{{ url_for('static', filename='logonobg.png') }}" alt="logo" class="center">
+    <div style="width: 50px;">  
+    </div>
 
         <div class="header-content">
-
+                
             <div>
-                <h1>Welcome to SportConnect</h1>
+                <h1>Welcome to SportConnect</h1>                
                 <p>Connect with other sports enthusiasts!</p>
             </div>
 
@@ -43,9 +49,7 @@
     <!-- SIDE NAVIGATION -->
 
     <aside>
-
-        <p class="Menu">Menu</p>
-
+        <div style="height: 50px;"></div>
         <a href="{{ url_for('home') }}">
             Home
         </a>
@@ -104,23 +108,20 @@
             Recommended Activities
         </h2>
 
-        <div class="activity-grid">
+        <div class="activity-grid" id="recommended-activities">
 
             {% for activity in recommended %}
-
                 <div class="activity-card">
 
-                    <div class="activity-title">
+                    <div class="activity-title" style="font-size: 20px;">
                         {{ activity.sport }}
                     </div>
 
-                    <p>{{ activity.date }}</p>
+                    <p><strong>Date and Time:</strong> {{ activity.date }} {{ activity.time }}</p>
+                    <p style="font-size: 20px;">{{ activity.joined }}/{{ activity.max_players }} <strong>Joined</strong></p>
+                    <p><strong>Location:</strong> {{ activity.location }}</p>
 
-                    <p>{{ activity.time }}</p>
-
-                    <p>
-                        {{ activity.joined }}/{{ activity.max_players }} Joined
-                    </p>
+                    <p class="activity-creator"><strong>Created by:</strong> {{ activity["creator_username"] }}</p>
 
                     <form
                         class="join-form"
@@ -171,26 +172,28 @@
         <!-- UPCOMING ACTIVITIES -->
 
         <h2 class="section-heading">
-            Your Upcoming Activities
+            Your Created Activities
         </h2>
 
-        <div class="activity-grid">
+        <div class="activity-grid" id="upcoming-activities"> <!-- an id lets js target a particular HTML element -->
 
             {% for activity in activities %}
 
                 <div class="activity-card">
 
-                    <div class="activity-title">
+                    <div class="activity-title" style="font-size: 20px;">
                         {{ activity["sport"] }}
                     </div>
 
                     <p>{{ activity["activity_name"] }}</p>
 
-                    <p> {{ activity["date"] }} {{ activity["time"] }}</p>
+                    <p><strong>Date and Time:</strong> {{ activity["date"] }} {{ activity["time"] }}</p>
 
-                    <p>{{ activity["location"] }}</p>
+                    <p><strong>Location:</strong> {{ activity["location"] }}</p>
 
-                    <p>maximum participants: {{ activity["participants"] }}</p>
+                    <p style="font-size: 20px;">{{ activity["has_joined"] }}/{{ activity["participants"] }} <strong>Joined</strong></p>
+                    
+                    <p><strong>Created by:</strong> {{ activity["creator_username"] }}</p>
 
                     <p>{{ activity["description"] }}</p>
 
@@ -201,6 +204,6 @@
         </div>
 
     </main>
-
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -4,6 +4,9 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='CssDesign.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='button-36.css') }}">
         <header class= "header">
+            <img style="width: 100px; height:100px;" src="{{ url_for('static', filename='logonobg.png') }}" alt="logo" class="center">
+                <div style="width: 50px;">  
+            </div>
             <div>
         <h1 style="font-size: 30px;">
             Welcome to SportConnect
@@ -42,7 +45,7 @@
             Create Activity
         </a>
 
-        <a href="{{ url_for('intro') }}">
+        <a href="{{ url_for('discover') }}">
             Discover
         </a>
 
@@ -57,13 +60,13 @@
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- main content -->
     <main>
         <h2>Create Activity</h2>
         
        <form class="activity-form" method="POST">
 
-    <!-- SPORT -->
+    <!-- sport -->
     <div class="form-field">
         <label for="sport">Sport</label>
 
@@ -73,11 +76,17 @@
             <option value="basketball">Basketball</option>
             <option value="badminton">Badminton</option>
             <option value="running">Running</option>
+            <option value="tennis">Tennis</option>
+            <option value="padel">Padel</option>
+            <option value="swimming">Swimming</option>
+            <option value="rugby">Rugby</option>
+            <option value="cricket">Cricket</option>
+            <option value="volleyball">Volleyball</option>
         </select>
     </div>
 
 
-    <!-- ACTIVITY NAME -->
+    <!-- activity name -->
     <div class="form-field">
         <label for="activity_name">Activity Name</label>
 
@@ -90,7 +99,7 @@
     </div>
 
 
-    <!-- DATE -->
+    <!-- date -->
     <div class="form-field">
         <label for="date">Date</label>
 
@@ -102,7 +111,7 @@
     </div>
 
 
-    <!-- TIME -->
+    <!-- time -->
     <div class="form-field">
         <label for="time">Time</label>
 
@@ -114,7 +123,7 @@
     </div>
 
 
-    <!-- LOCATION -->
+    <!-- location -->
     <div class="form-field">
         <label for="location">Location</label>
 
@@ -127,7 +136,7 @@
     </div>
 
 
-    <!-- PARTICIPANTS -->
+    <!-- participants -->
     <div class="form-field">
         <label for="participants">Number of Participants</label>
 
@@ -141,7 +150,7 @@
     </div>
 
 
-    <!-- DESCRIPTION -->
+    <!-- description -->
     <div class="form-field full-width">
         <label for="description">Description</label>
 
@@ -154,7 +163,7 @@
     </div>
 
 
-    <!-- SUBMIT -->
+    <!-- submit -->
     <button type="submit" class="button-36" text align="center">
         Create Activity
     </button>

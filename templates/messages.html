@@ -19,9 +19,11 @@
   }
 
 </style>
-
-    <!-- HEADER -->
+    <!-- header -->
     <header class="header">
+        <img style="width: 100px; height:100px;" src="{{ url_for('static', filename='logonobg.png') }}" alt="logo" class="center">
+                <div style="width: 50px;">  
+            </div>
         <div>
             <h1 style="font-size: 30px;">
                 Welcome to SportConnect
@@ -34,7 +36,7 @@
     </header>
 
 
-    <!-- SIDE NAVIGATION -->
+    <!-- side navigation -->
     <aside>
 
         <p align="center" class="Menu">
@@ -53,7 +55,7 @@
             Create Activity
         </a>
 
-        <a href="{{url_for('createactivity') }}">
+        <a href="{{url_for('discover') }}">
             Discover
         </a>
 
@@ -68,20 +70,43 @@
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- main content -->
     <main>
+
+
+
+        {% if users is defined %}
+            <section class="user-search-results">
+                <h2 class="section-heading">Find people</h2>
+
+                        <form action="{{ url_for('search_users') }}" method="POST" class="messages-user-search-form">
+                            <input type="text" name="username" placeholder="Search for a username" value="{{ search_query or '' }}" required class="messages-user-search-input">
+                            <button type="submit">Search</button>
+                        </form>
+
+                {% for user in users %}
+                    <div class="user-search-result">
+                        <span>{{ user["username"] }}</span>
+
+                        <a href="{{ url_for('conversation', user_id=user['id']) }}">Open chat</a>
+                    </div>
+                {% else %}
+                    <p>No users found</p>
+                {% endfor %}
+            </section>
+        {% endif %}
 
         <h2>Messages</h2>
 
 
-        <!-- MESSAGE CONTAINER -->
+        <!-- message container -->
         <div class="message-container">
 
 
-            <!-- CONTACTS -->
+            <!-- contacts -->
             <div class="contacts">
 
-                <!-- CONTACT SEARCH -->
+                <!-- contact search -->
                 <div class="contacts-header">
 
                     <input
@@ -92,133 +117,69 @@
 
                 </div>
 
+                {% for contact in contacts %}
+                    <a class="contact" href="{{ url_for('conversation', user_id=contact['id']) }}">
+                        
+                        <div class="contact-name">
+                            {{ contact['username'] }}
+                        </div>
 
-                <!-- PERSON 1 -->
-                <div class="contact active" data-person="Person 1">
-
-                    <div class="profile-picture">
-
-                        <img
-                            src="{{ url_for('static', filename='profile.png') }}"
-                            alt="Profile Picture"
-                        >
-
-                    </div>
-
-                    <div class="contact-info">
-
-                        <strong>
-                            Person 1
-                        </strong>
-
-                        <span>
-                            Hi, how are you?
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PERSON 2 -->
-                <div class="contact" data-person="Person 2">
-
-                    <div class="profile-picture">
-
-                        <img
-                            src="{{ url_for('static', filename='profile.png') }}"
-                            alt="Profile Picture"
-                        >
-
-                    </div>
-
-                    <div class="contact-info">
-
-                        <strong>
-                            Person 2
-                        </strong>
-
-                        <span>
-                            Are you coming to the game?
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PERSON 3 -->
-                <div class="contact" data-person="Person 3">
-
-                    <div class="profile-picture">
-
-                        <img
-                            src="{{ url_for('static', filename='profile.png') }}"
-                            alt="Profile Picture"
-                        >
-
-                    </div>
-
-                    <div class="contact-info">
-
-                        <strong>
-                            Person 3
-                        </strong>
-
-                        <span>
-                            What time is the match?
-                        </span>
-
-                    </div>
-
-                </div>
-
+                        <div class="contact-last-message">
+                            {{ contact['latest_message']}}
+                        </div>
+                    </a>
+                
+                {% else %}
+                    <p>No conversations yet. Search a username to chat</p>
+                {% endfor %}
             </div>
 
-
-            <!-- CHAT PANEL -->
+            <!-- chat panel -->
             <div class="chat-panel">
 
+                {% if other_user is defined and other_user %}
 
-                <!-- CHAT HEADER -->
-                <div class="chat-header">
+                    <!-- chat header -->
+                    <div class="chat-header">
 
-                    <div class="profile-picture">
+                        <div class="profile-picture">
 
-                        <img
-                            src="{{ url_for('static', filename='profile.png') }}"
-                            alt="Profile Picture"
-                        >
+                            <img
+                                src="{{ url_for('static', filename='profile.png') }}"
+                                alt="Profile Picture"
+                            >
 
+                        </div>
+
+                        <div>
+                            <strong>{{ other_user["username"] }}</strong>
+                        </div>
                     </div>
 
-                    <div>
 
-                        <strong id="chat-person">
-                            Person 1
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- MESSAGES -->
+                <!-- messages -->
                 <div class="chat-messages">
 
                     {% for message in messages %}
 
-                        <div class="message {{ message.type }}">
-                            {{ message.text }}
+                        <div class="message
+                            {% if message['sender_id'] == session['user_id'] %}
+                                sent
+                            {% else %}
+                                received
+                            {% endif %}
+                            ">
+                                {{ message["content"] }}
                         </div>
-
+                    {% else %}
+                        <p>No messages yet. Start a conversation.</p>
                     {% endfor %}
 
                 </div>
 
 
-                <!-- MESSAGE INPUT -->
-                <form class="message-form" method="POST">
+                <!-- message input -->
+                <form action="{{ url_for('conversation', user_id=other_user['id']) }}" method="POST" class="message-form">
 
                     <input
                         type="text"
@@ -226,6 +187,7 @@
                         id="message-input"
                         placeholder="Type a message..."
                         autocomplete="off"
+                        maxlength="2000"
                         required
                     >
 
@@ -235,6 +197,14 @@
 
                 </form>
 
+            {% else %}
+                <div class="chat-header">
+                    <strong>Messages</strong>
+                </div>
+
+                <p>Select a user from your search to start chatting</p>
+
+            {% endif %}
 
             </div>
 

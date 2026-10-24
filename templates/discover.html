@@ -11,13 +11,21 @@
 </head>
 
      <header class="header">
-
+            <img style="width: 100px; height:100px;" src="{{ url_for('static', filename='logonobg.png') }}" alt="logo" class="center">
+                <div style="width: 50px;">  
+            </div>
         <div class="header-content">
 
-            <img src="{{ url_for('static', filename='logo.png') }}"
-                 alt="SportConnect logo"
-                 class="logo">
-
+                <style>
+                    body {
+                        background-image: url("{{ url_for('static', filename='bg.jpg') }}");
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-attachment: fixed;
+                    }
+                </style>
+            
             <div>
                 <h1>Welcome to SportConnect</h1>
                 <p>Connect with other sports enthusiasts!</p>
@@ -57,6 +65,96 @@
 
     </aside>
 
+    <body>
+        <main>
+                    <h2 class="search-activities-header">
+            Search Activities
+        </h2>
+
+        <!-- SEARCH BAR -->
+
+        <form id="form" class="search-activities-form">
+
+            <input
+                type="search"
+                id="query"
+                placeholder="Search for activities..."
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+                <div class="activity-grid">
+
+                    {% for activity in activities %}
+
+                        <div class="activity-card">
+
+                            <div class="activity-title">
+                                {{ activity["sport"] }}
+                            </div>
+                            <p>{{ activity["date"] }}</p>
+                            <p>{{ activity["time"] }}</p>
+                            <p>{{ activity["joined"] }}/{{ activity["participants"] }} Joined</p>
+                            <p>{{ activity["location"] }}</p>
+                            <p class="activity-creator">Created by: {{ activity["creator_username"] }}</p>
+
+                            <form
+                                class="join-form"
+                                action="{{ url_for('join_activity', activity_id=activity.id) }}"
+                                method="POST"
+                            >
+
+                                {% if activity["has_joined"] %}
+
+                                    <button
+                                        type="submit"
+                                        class="join-button joined-button"
+                                        disabled
+                                    >
+                                        Joined
+                                    </button>
+
+                                {% elif activity["joined"] >= activity["participants"] %}
+
+                                    <button
+                                        type="submit"
+                                        class="join-button full-button"
+                                        disabled
+                                    >
+                                        Full
+                                    </button>
+
+                                {% else %}
+
+                                    <button
+                                        type="submit"
+                                        class="join-button"
+                                    >
+                                        Join
+                                    </button>
+
+                                {% endif %}
+
+                            </form>
+
+                        </div>
+
+                        {% else %}
+                            <p>No activites found. Try again later!</p>
+
+                    {% endfor %}
+
+                </div>
+
+
+        </main>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
 
 
 </html>

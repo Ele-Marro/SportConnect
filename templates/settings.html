@@ -11,9 +11,19 @@
         <title>SportConnect - Settings</title>
     </head>
     <body>
+        
+                <style>
+            body {
+                background-image: url('{{ url_for("static", filename="bg.jpg") }}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
+            </style>
+
         <header class="header">
             <div class="header-content">
-                <img src="{{ url_for('static', filename='logo.png') }}" alt="SportConnect logo" class="logo">
                 <div>
                     <h1>SportConnect Settings</h1>
                 </div>
@@ -38,7 +48,7 @@
             Create Activity
         </a>
 
-        <a href="void(0)">
+        <a href="{{ url_for('discover') }}">
             Discover
         </a>
 
@@ -46,11 +56,64 @@
             Settings
         </a>
 
-        <a href="javascript:void(0)">
+        <a href="{{ url_for('logout') }}">
             Logout
         </a>
 
     </aside>
+
+    
+    <!-- main content -->
+    
+        <h2>Create Activity</h2>
+        
+       <form class="activity-form" method="POST">
+
+    <!-- sport -->
+    <div class="form-field">
+        <label for="sport">Username Displayed</label>
+        <input
+            type: "text"
+            id="username"
+            name: "username"
+        >
+    </div>
+
+
+
+    <!-- location -->
+    <div class="form-field">
+        <label for="location">City</label>
+
+        <input
+            type="text"
+            id="city"
+            name="city"
+            placeholder="e.g. Eindhoven"
+        >
+    </div>
+
+
+    <!-- participants -->
+    <div class="form-field">
+        <label for="participants">Liked Sports</label>
+
+        <input
+            type="text"
+            id="likedsports"
+            name="likedsports"
+   
+        >
+    </div>
+
+
+    <!-- submit -->
+    <button type="submit" class="button-36" text align="center">
+        Save Changes
+    </button>
+
+</form>
+    
         </main>
     </body>
 </html>
