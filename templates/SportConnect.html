@@ -66,6 +66,10 @@
             Discover
         </a>
 
+        <a href="{{ url_for('joined') }}">
+            Joined Activities
+        </a>
+
         <a href="{{ url_for('settings') }}">
             Settings
         </a>
@@ -191,7 +195,7 @@
 
                     <p><strong>Location:</strong> {{ activity["location"] }}</p>
 
-                    <p style="font-size: 20px;">{{ activity["has_joined"] }}/{{ activity["participants"] }} <strong>Joined</strong></p>
+                    <p style="font-size: 20px;">{{ activity["joined_count"] }}/{{ activity["participants"] }} <strong>Joined</strong></p>
                     
                     <p><strong>Created by:</strong> {{ activity["creator_username"] }}</p>
 

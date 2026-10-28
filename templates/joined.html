@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>SportConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='CssDesign.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='button-36.css') }}">
+</head>
+
+     <header class="header">
+            <img style="width: 100px; height:100px;" src="{{ url_for('static', filename='logonobg.png') }}" alt="logo" class="center">
+                <div style="width: 50px;">  
+            </div>
+        <div class="header-content">
+
+                <style>
+                    body {
+                        background-image: url("{{ url_for('static', filename='bg.jpg') }}");
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-attachment: fixed;
+                    }
+                </style>
+            
+            <div>
+                <h1>Welcome to SportConnect</h1>
+                <p>Connect with other sports enthusiasts!</p>
+            </div>
+
+        </div>
+
+    </header>
+
+       <aside>
+
+        <div style="height: 50px;"></div>
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('messages') }}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('createactivity') }}">
+            Create Activity
+        </a>
+
+        <a href="{{ url_for('discover') }}">
+            Discover
+        </a>
+
+        <a href="{{ url_for('joined') }}">
+            Joined Activities
+        </a>
+
+        <a href="{{ url_for('settings') }}">
+            Settings
+        </a>
+
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </aside>
+
+<main>
+    <h2 class="section-heading">
+        Joined activities (excluding created ones)
+    </h2>
+
+    <div class="activity-grid">
+        {% for activity in activities %}
+            <article class="activity-card">
+                <h3 class="activity-title" style="font-size: 20px;">
+                    {{ activity["sport"] }}
+                </h3>
+                <p><strong>Date:</strong> {{ activity["date"] }}<strong> At:</strong> {{ activity["time"] }}</p>
+                <p><strong>Location:</strong> {{ activity["location"] }}</p>
+                <p><strong>Organised by:</strong> {{ activity["creator_username"] }}</p>
+                <p style="font-size: 20px;">Participants:
+                    <strong>{{ activity["joined_count"] }} /
+                    {{ activity["max_players"] }}</strong>
+                </p>
+            </article>
+        {% else %}
+            <p>You haven't joined any activities yet.</p>
+        {% endfor %}
+    </div>
+</main>

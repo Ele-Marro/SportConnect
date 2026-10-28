@@ -169,26 +169,31 @@ li {
 
 /* ACTIVITY CARDS */
 
+
+/* ACTIVITY CARDS */
+
 .activity-grid {
-    display: flex;
-    justify-content: center;
-    gap: 100px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
     width: 100%;
     margin: 20px auto 35px;
+    align-items: stretch;
 }
 
 .activity-card {
     display: flex;
     flex-direction: column;
-    width: 220px;
-    height: 255px;
-    min-height: 190px;
-    margin: 16px;
+    width: 100%;
+    min-width: 0;
+    min-height: 255px;
+    margin: 0;
     padding: 10px;
     text-align: center;
     background: #fb8c18;
     border-radius: 12px;
 }
+
 
 .activity-title {
     width: 90%;
@@ -728,5 +733,18 @@ main:has(.message-container) {
 
     .messages-user-search-input {
         flex-basis: 100%;
+    }
+}
+
+
+@media (max-width: 1100px) {
+    .activity-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .activity-grid {
+        grid-template-columns: 1fr;
     }
 }

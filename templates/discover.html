@@ -37,7 +37,7 @@
 
        <aside>
 
-        <p class="Menu">Menu</p>
+        <div style="height: 50px;"></div>
 
         <a href="{{ url_for('home') }}">
             Home
@@ -55,6 +55,10 @@
             Discover
         </a>
 
+        <a href="{{ url_for('joined') }}">
+            Joined Activities
+        </a>
+
         <a href="{{ url_for('settings') }}">
             Settings
         </a>
@@ -67,7 +71,7 @@
 
     <body>
         <main>
-                    <h2 class="search-activities-header">
+        <h2 class="search-activities-header">
             Search Activities
         </h2>
 
@@ -93,14 +97,13 @@
 
                         <div class="activity-card">
 
-                            <div class="activity-title">
+                            <div class="activity-title" style="font-size: 20px;">
                                 {{ activity["sport"] }}
                             </div>
-                            <p>{{ activity["date"] }}</p>
-                            <p>{{ activity["time"] }}</p>
-                            <p>{{ activity["joined"] }}/{{ activity["participants"] }} Joined</p>
-                            <p>{{ activity["location"] }}</p>
-                            <p class="activity-creator">Created by: {{ activity["creator_username"] }}</p>
+                            <p><strong>Date:</strong> {{ activity["date"] }} at {{ activity["time"] }}</p>
+                            <p style="font-size: 20px;"><strong>{{ activity["joined"] }}/{{ activity["participants"] }}</strong> Joined</p>
+                            <p><strong>Place: </strong>{{ activity["location"] }}</p>
+                            <p class="activity-creator"><strong>Created by: </strong>{{ activity["creator_username"] }}</p>
 
                             <form
                                 class="join-form"
@@ -144,17 +147,13 @@
                         </div>
 
                         {% else %}
-                            <p>No activites found. Try again later!</p>
+                            <p>No activities found. Try again later!</p>
 
                     {% endfor %}
 
                 </div>
-
-
         </main>
 
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </body>
-
-
 </html>

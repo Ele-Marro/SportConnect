@@ -23,8 +23,12 @@
             </style>
 
         <header class="header">
+            <div style="width: 50px;"></div>
+                    <img style="width: 100px; height:100px;" src="{{ url_for('static', filename='logonobg.png') }}" alt="logo" class="center"> 
+            <div style="width: 50px;"></div>
             <div class="header-content">
-                <div>
+                <div style="width: 50px;"></div>
+                <div> 
                     <h1>SportConnect Settings</h1>
                 </div>
             </div>
@@ -34,7 +38,7 @@
             <!-- Settings content goes here -->
                  <aside>
 
-        <p class="Menu">Menu</p>
+        <div style="height: 50px;"></div>
 
         <a href="{{ url_for('home') }}">
             Home
@@ -52,6 +56,10 @@
             Discover
         </a>
 
+        <a href="{{ url_for('joined') }}">
+            Joined Activities
+        </a>
+
         <a href="{{ url_for('settings') }}">
             Settings
         </a>
@@ -65,31 +73,24 @@
     
     <!-- main content -->
     
-        <h2>Create Activity</h2>
+        <h2>Your information</h2>
+
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
         
        <form class="activity-form" method="POST">
+
 
     <!-- sport -->
     <div class="form-field">
         <label for="sport">Username Displayed</label>
         <input
-            type: "text"
-            id="username"
-            name: "username"
-        >
-    </div>
-
-
-
-    <!-- location -->
-    <div class="form-field">
-        <label for="location">City</label>
-
-        <input
             type="text"
-            id="city"
-            name="city"
-            placeholder="e.g. Eindhoven"
+            id="username"
+            name="username"
+            value="{{ settings['username'] }}"
+            required
         >
     </div>
 
@@ -102,6 +103,7 @@
             type="text"
             id="likedsports"
             name="likedsports"
+            placeholder="e.g. Football, basketball"
    
         >
     </div>

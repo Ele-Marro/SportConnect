@@ -5,11 +5,41 @@ from flask import Flask, render_template, request, redirect, session, url_for  #
 #gets tools to communicate with SQLite database
 import sqlite3
 #opens connection to the database file
+from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
+
+load_dotenv()
 
 # Initializes the app, creating the Flask application instance and setting up the database connection.
 app = Flask(__name__)
 app.secret_key = os.environ.get("SPORTCONNECT_SECRET_KEY") #a secret key is what Flask uses to protect the session data from being tampered with. It is used to sign the session cookies and ensure that they have not been modified by the client. The secret key should be kept secret and not shared with anyone, as it is used to protect sensitive information in the session data.
+
+
+def cleanup_expired_activities():
+    connection = sqlite3.connect("SportConnect.db")
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("""
+        DELETE FROM activity_participants
+        WHERE activity_id IN (
+            SELECT id
+            FROM activity
+            WHERE date < date ('now', 'localtime')
+        )
+        """)
+
+        cursor.execute("""
+            DELETE FROM activity
+            WHERE date < date('now', 'localtime')
+        """)
+
+        connection.commit()
+    finally:
+        connection.close()
+
+
+cleanup_expired_activities()
 
 def init_db():
     connection = sqlite3.connect("SportConnect.db")
@@ -147,7 +177,7 @@ def home():
         WHERE a.creator_id != ?
         ORDER BY a.created_at DESC, a.id DESC
 
-        LIMIT 3
+        LIMIT 4
     """, (user_id, user_id))
 
     recommended = cursor.fetchall()
@@ -236,15 +266,86 @@ def createaccount():
 
     return render_template("createaccount.html")
 
-# MESSAGES
-@app.get("/settings")
+
+@app.route("/settings", methods=["GET", "POST"])
 def settings():
-    return render_template("settings.html")
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+
+    connection = sqlite3.connect("SportConnect.db")
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    if request.method == "POST":
+        username = (request.form.get("username") or "").strip()
+
+        if not username:
+            cursor.execute(
+                "SELECT username FROM users WHERE id = ?",
+                (user_id,)
+            )
+            current_settings = cursor.fetchone()
+            connection.close()
+
+            return render_template(
+                "settings.html",
+                settings=current_settings,
+                error="Username cannot be empty."
+            ), 400
+
+        cursor.execute("""
+            SELECT id
+            FROM users
+            WHERE username = ? AND id != ?
+        """, (username, user_id))
+
+        if cursor.fetchone():
+            cursor.execute(
+                "SELECT username FROM users WHERE id = ?",
+                (user_id,)
+            )
+            current_settings = cursor.fetchone()
+            connection.close()
+
+            return render_template(
+                "settings.html",
+                settings=current_settings,
+                error="That username is already taken."
+            ), 400
+
+        cursor.execute("""
+            UPDATE users
+            SET username = ?
+            WHERE id = ?
+        """, (username, user_id))
+
+        connection.commit()
+        connection.close()
+
+        return redirect(url_for("settings"))
+
+    cursor.execute("""
+        SELECT username
+        FROM users
+        WHERE id = ?
+    """, (user_id,))
+
+    current_settings = cursor.fetchone()
+    connection.close()
+
+    return render_template(
+        "settings.html",
+        settings=current_settings,
+        error=None
+    )
+
 
 
 @app.get("/logout")
 def logout():
-    session.pop("user_id", None)
+    session.pop("user_id", None) #wipes out entire session data when the user logs out
     return redirect(url_for("intro"))
 
 @app.get("/discover")
@@ -294,6 +395,50 @@ def discover():
     connection.close()
 
     return render_template("discover.html", activities=activities)
+
+
+@app.get("/joined")
+def joined():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+
+    connection = sqlite3.connect("SportConnect.db")
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            a.id,
+            a.sport,
+            a.activity_name,
+            a.date,
+            a.time,
+            a.location,
+            a.description,
+            a.participants AS max_players,
+            u.username AS creator_username,
+            (
+                SELECT COUNT(*)
+                FROM activity_participants AS ap
+                WHERE ap.activity_id = a.id
+            ) AS joined_count
+        FROM activity AS a
+        JOIN activity_participants AS p
+            ON p.activity_id = a.id
+        JOIN users AS u
+            ON u.id = a.creator_id
+        WHERE p.user_id = ?
+          AND a.creator_id != ?
+        ORDER BY a.date, a.time
+    """, (user_id, user_id))
+
+    activities = cursor.fetchall()
+    connection.close()
+
+    return render_template("joined.html", activities=activities)
+
 
 
 @app.route("/search_users", methods=["GET", "POST"])
@@ -389,7 +534,8 @@ def messages():
 
 
 
-@app.route("/messages/<int:user_id>", methods=["GET", "POST"])
+@app.route("/messages/<int:user_id>", methods=["GET", "POST"]) #<...> is a dynamic route. This allows for variables to be passed within <..>
+# this allows my application to identify which resource my user wants
 def conversation(user_id):
     if "user_id" not in session:
             return redirect(url_for("intro"))
@@ -524,7 +670,10 @@ def createactivity():
             cursor = connection.cursor()
 
             
-            cursor.execute("PRAGMA table_info(activity)")
+            cursor.execute("PRAGMA table_info(activity)") #PRAGMA is a tool to query database metadata
+            # in this case, we are checking the table activity's metadata to find out data such as which columns exist/data types of columns
+            # in this case, it is good to have as a temporary database debugger to catch "Table/Column not found errors"
+            # these errors could happen, as we need to match form fields (sport, date, time) to column names in sqlite 
             print("ACTIVITY TABLE:", cursor.fetchall())
             
 
@@ -605,8 +754,6 @@ def join_activity(activity_id):
     connection.close()
 
     return redirect(url_for("home"))
-
-
 
 
 
