@@ -221,12 +221,14 @@ def login():
                                             #[0] is the first item (user's id)
             return redirect(url_for("home"))#how it works is that it takes the first value in the result
 
-        return "Invalid email or password"
+        return redirect(url_for("incorrectdetails"))
     
 
     return render_template("login.html")
 
-
+@app.route("/incorrectdetails")
+def incorrectdetails():
+    return render_template("incorrectdetails.html")
 
 @app.route("/createaccount", methods=["GET", "POST"])
 def createaccount():
@@ -267,6 +269,7 @@ def createaccount():
     return render_template("createaccount.html")
 
 
+
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
     if "user_id" not in session:
@@ -280,10 +283,12 @@ def settings():
 
     if request.method == "POST":
         username = (request.form.get("username") or "").strip()
+        email = (request.form.get("email") or "").strip()
 
-        if not username:
+        # Check that both fields have been completed
+        if not username or not email:
             cursor.execute(
-                "SELECT username FROM users WHERE id = ?",
+                "SELECT username, email FROM users WHERE id = ?",
                 (user_id,)
             )
             current_settings = cursor.fetchone()
@@ -292,18 +297,18 @@ def settings():
             return render_template(
                 "settings.html",
                 settings=current_settings,
-                error="Username cannot be empty."
+                error="Username and email cannot be empty."
             ), 400
 
+        # Check whether another user has the same username
         cursor.execute("""
-            SELECT id
-            FROM users
+            SELECT id FROM users
             WHERE username = ? AND id != ?
         """, (username, user_id))
 
         if cursor.fetchone():
             cursor.execute(
-                "SELECT username FROM users WHERE id = ?",
+                "SELECT username, email FROM users WHERE id = ?",
                 (user_id,)
             )
             current_settings = cursor.fetchone()
@@ -315,23 +320,43 @@ def settings():
                 error="That username is already taken."
             ), 400
 
+        # Check whether another user has the same email
+        cursor.execute("""
+            SELECT id FROM users
+            WHERE email = ? AND id != ?
+        """, (email, user_id))
+
+        if cursor.fetchone():
+            cursor.execute(
+                "SELECT username, email FROM users WHERE id = ?",
+                (user_id,)
+            )
+            current_settings = cursor.fetchone()
+            connection.close()
+
+            return render_template(
+                "settings.html",
+                settings=current_settings,
+                error="That email address is already in use."
+            ), 400
+
+        # Update both fields for the logged-in user
         cursor.execute("""
             UPDATE users
-            SET username = ?
+            SET username = ?, email = ?
             WHERE id = ?
-        """, (username, user_id))
+        """, (username, email, user_id))
 
         connection.commit()
         connection.close()
 
         return redirect(url_for("settings"))
 
-    cursor.execute("""
-        SELECT username
-        FROM users
-        WHERE id = ?
-    """, (user_id,))
-
+    # Display the current settings
+    cursor.execute(
+        "SELECT username, email FROM users WHERE id = ?",
+        (user_id,)
+    )
     current_settings = cursor.fetchone()
     connection.close()
 

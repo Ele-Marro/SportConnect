@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='CssDesign.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='button-36.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylelogin.css') }}">
+</head>
+
+<body>
+    <div class="main">
+
+        <div class="login">
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div style="height: 150px;"></div>
+                <label>Login</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    required
+                >
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                >
+                <p id="wrongpass">Invalid email or Password</p>
+                <button type="submit">Login</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

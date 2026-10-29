@@ -84,6 +84,7 @@
 
     <!-- sport -->
     <div class="form-field">
+        <h2 id="SettingsHead">Welcome, {{ settings['username'] }}</h2>
         <label for="sport">Username Displayed</label>
         <input
             type="text"
@@ -94,20 +95,15 @@
         >
     </div>
 
-
-    <!-- participants -->
     <div class="form-field">
-        <label for="participants">Liked Sports</label>
+        <label>Email address</label>
 
         <input
             type="text"
-            id="likedsports"
-            name="likedsports"
-            placeholder="e.g. Football, basketball"
-   
-        >
+            id="email"
+            name="email"
+            value="{{ settings['email'] }}">
     </div>
-
 
     <!-- submit -->
     <button type="submit" class="button-36" text align="center">

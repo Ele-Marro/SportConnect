@@ -88,12 +88,12 @@
 
                 {% for user in users %}
                     <div class="user-search-result">
-                        <span>{{ user["username"] }}</span>
+                        <span id="userfind">{{ user["username"] }}</span>
 
-                        <a href="{{ url_for('conversation', user_id=user['id']) }}">Open chat</a>
+                        <a href="{{ url_for('conversation', user_id=user['id']) }}" id="userfind">Open chat</a>
                     </div>
                 {% else %}
-                    <p>No users found</p>
+                    <p id="userfind">No users found</p>
                 {% endfor %}
             </section>
         {% endif %}
@@ -107,17 +107,6 @@
 
             <!-- contacts -->
             <div class="contacts">
-
-                <!-- contact search -->
-                <div class="contacts-header">
-
-                    <input
-                        type="text"
-                        placeholder="Search contacts"
-                        id="contact-search"
-                    >
-
-                </div>
 
                 {% for contact in contacts %}
                     <a class="contact" href="{{ url_for('conversation', user_id=contact['id']) }}">
@@ -203,13 +192,11 @@
                 <div class="chat-header">
                     <strong>Messages</strong>
                 </div>
-
                 <p>Select a user from your search to start chatting</p>
 
             {% endif %}
 
             </div>
-
         </div>
     </main>
 

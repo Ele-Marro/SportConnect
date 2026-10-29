@@ -670,7 +670,9 @@ main:has(.message-container) {
 }
 
 
-
+#userfind {
+    color:white;
+}
 /* MESSAGES: FIND PEOPLE SEARCH */
 
 .messages-user-search-form {
@@ -699,6 +701,11 @@ main:has(.message-container) {
 .messages-user-search-input {
     flex: 1;
     width: 100%;
+}
+
+#wrongpass {
+    color: red;
+    text-align: center;
 }
 
 .contacts-header input {
@@ -747,4 +754,8 @@ main:has(.message-container) {
     .activity-grid {
         grid-template-columns: 1fr;
     }
+}
+
+#SettingsHead {
+    color: #030303;
 }
