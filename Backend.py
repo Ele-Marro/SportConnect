@@ -1,6 +1,11 @@
 import os
 from time import time #importing time stamps
 
+DATABASE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "SportConnect.db"
+)
+
 from flask import Flask, render_template, request, redirect, session, url_for  # type: ignore[reportMissingImports]
 #gets tools to communicate with SQLite database
 import sqlite3
@@ -213,15 +218,25 @@ def login():
             "SportConnect.db"
         )
 
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(DATABASE_PATH)
         cursor = connection.cursor()
 
+
+
         try:
+
+            cursor.execute(
+                "SELECT id, username, email FROM users"
+            )
+            users = cursor.fetchall()
+
             cursor.execute(
                 "SELECT id, username, password_hash FROM users WHERE email = ?",
                 (email,)
             )
             user = cursor.fetchone()
+
+
         finally:
             connection.close()
 
@@ -230,6 +245,8 @@ def login():
             return redirect(url_for("home"))
 
         return redirect(url_for("incorrectdetails"))
+
+        
 
     return render_template("login.html")
 
@@ -253,6 +270,10 @@ def createaccount():
 
         connection = sqlite3.connect("SportConnect.db")
         cursor = connection.cursor()
+
+        
+        cursor.execute("SELECT id, username FROM users")
+
 
         try:
             cursor.execute("""
