@@ -143,7 +143,7 @@
                                 Joined
                             </button>
 
-                        {% elif activity.joined >= activity.max_players %}
+                        {% elif activity.joined >= activity.max_players|int %}
 
                             <button
                                 type="submit"

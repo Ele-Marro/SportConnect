@@ -196,58 +196,65 @@ def intro():
     return render_template("intro.html")
 
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
     if request.method == "POST":
 
-        email = request.form.get("email")
-        password = request.form.get("password")
+        email = (request.form.get("email") or "").strip().lower()
+        password = request.form.get("password") or ""
 
-        connection = sqlite3.connect("SportConnect.db")
-        cursor = connection.cursor()
+        if not email or not password:
+            return redirect(url_for("incorrectdetails"))
 
-        cursor.execute(
-            "SELECT id, username, password_hash FROM users WHERE email = ?",
-            (email,)
+        # Use the database file located alongside Backend.py
+        database_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "SportConnect.db"
         )
 
-        user = cursor.fetchone()
+        connection = sqlite3.connect(database_path)
+        cursor = connection.cursor()
 
-        connection.close()
+        try:
+            cursor.execute(
+                "SELECT id, username, password_hash FROM users WHERE email = ?",
+                (email,)
+            )
+            user = cursor.fetchone()
+        finally:
+            connection.close()
 
         if user and check_password_hash(user[2], password):
-            session["user_id"] = user[0]    #this is 0 based indexing:
-                                            #[0] is the first item (user's id)
-            return redirect(url_for("home"))#how it works is that it takes the first value in the result
+            session["user_id"] = user[0]
+            return redirect(url_for("home"))
 
         return redirect(url_for("incorrectdetails"))
-    
 
     return render_template("login.html")
+
 
 @app.route("/incorrectdetails")
 def incorrectdetails():
     return render_template("incorrectdetails.html")
 
+
 @app.route("/createaccount", methods=["GET", "POST"])
 def createaccount():
-
     if request.method == "POST":
-
-        username = (request.form.get("username") or "").strip() #removes spaces/tabs
+        username = (request.form.get("username") or "").strip()
         email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
 
         if not username or not email or not password:
-            return "Please fill in all required fields.", 400 #400 is the HTTP status code for the error
+            return "Please fill in all required fields.", 400
 
         password_hash = generate_password_hash(password)
 
         connection = sqlite3.connect("SportConnect.db")
         cursor = connection.cursor()
 
-        try: #tries something
+        try:
             cursor.execute("""
                 INSERT INTO users (username, email, password_hash)
                 VALUES (?, ?, ?)
@@ -256,17 +263,23 @@ def createaccount():
             connection.commit()
 
             session["user_id"] = cursor.lastrowid
-            
-            cursor.execute("SELECT * FROM users")
-            print("USERS IN DATABASE:", cursor.fetchall())
+
             return redirect(url_for("home"))
-        except sqlite3.Error as e: #exception (error that occurs on the code)
-            connection.rollback() #if the database error occurs, it prevents the "try" from running. If we did not have this, the whole app would break
-            return f"Database error: {e}", 500 #f string allows you to insert a variable into the curly brackets (quicker to write than other methods)
-        finally: #regardless
+
+        except sqlite3.IntegrityError:
+            connection.rollback()
+            return "That username or email may already be registered.", 400
+
+        except sqlite3.Error as e:
+            connection.rollback()
+            app.logger.exception("Database error during account creation")
+            return "An error occurred while creating your account.", 500
+
+        finally:
             connection.close()
 
     return render_template("createaccount.html")
+
 
 
 

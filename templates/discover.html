@@ -121,7 +121,7 @@
                                         Joined
                                     </button>
 
-                                {% elif activity["joined"] >= activity["participants"] %}
+                                {% elif activity["joined"] >= activity["participants"]|int %}
 
                                     <button
                                         type="submit"
